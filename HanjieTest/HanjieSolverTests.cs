@@ -10,14 +10,6 @@ namespace HanjieTest
     public class HanjieSolverTests
     {
         [TestMethod]
-        public void SanityTest()
-        {
-            int expected = 1;
-            int actual = HanjieSolver.SanityCheck();
-            Assert.AreEqual(expected, actual, "The Sanity check failed.");
-        }
-
-        [TestMethod]
         public void Solve7in10LineTest()
         {
 

@@ -2,15 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
+/// <summary>
+/// Solves the game of Hanjie, a Japanese puzzle 
+/// in which you have to fill rows to match the given blocks
+/// EXAMPLE
+///        1
+///        1   2
+///      3 1 4 2 3
+///      _ _ _ _ _
+///  3  |_|X|X|X|_|
+///1 3  |X|_|X|X|X|
+///3 1  |X|X|X|_|X|
+///1 3  |X|_|X|X|X|
+///1 1  |_|X|_|X|_|
+/// </summary>
 namespace Hanjie
 {
     public class HanjieSolver
     {
-        public static int SanityCheck()
-        {
-            return 1;
-        }
-
+        /// <summary>
+        /// Generates all possible combinations of blocks on the line and
+        /// compares them with each other and the current line to see what
+        /// deductions can be made.
+        /// </summary>
+        /// <param name="blocks"></param>
+        /// <param name="currentLine"></param>
+        /// <returns></returns>
         public static char[] LineSolver(int[] blocks, char[] currentLine)
         {
             int numberOfBlocks = blocks.Length;
@@ -100,7 +118,12 @@ namespace Hanjie
             }
             return currentLine;
         }
-
+        /// <summary>
+        /// Finds a vertical line from the row map
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static char[] GetVerticalLine(List<char[]> map, int index)
         {
             int length = map[0].Length;
@@ -111,7 +134,13 @@ namespace Hanjie
             }
             return output;
         }
-
+        /// <summary>
+        /// places a vertical line solution back into the matrix
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="line"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static List<char[]> AddVerticalLine(List<char[]> map, char[] line, int index)
         {
             for (int i = 0; i < line.Length; i++)
@@ -120,7 +149,11 @@ namespace Hanjie
             }
             return map;
         }
-
+        /// <summary>
+        /// Sets up the grid with values
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public static List<char[]> InitMap(int length)
         {
             var lines = new List<char[]>();
@@ -136,7 +169,13 @@ namespace Hanjie
             }
             return lines;
         }
-
+        /// <summary>
+        /// Tests to see if anything new squares can be solved
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="horizontalBlocks"></param>
+        /// <param name="verticalBlocks"></param>
+        /// <returns></returns>
         public static List<char[]> CheckMap(List<char[]> map, List<int[]> horizontalBlocks, List<int[]> verticalBlocks)
         {
             for (int i = 0; i < horizontalBlocks.Count; i++)
@@ -150,7 +189,10 @@ namespace Hanjie
             }
             return map;
         }
-
+        /// <summary>
+        /// displays the map to the console.
+        /// </summary>
+        /// <param name="map"></param>
         public static void PrintMap(List<char[]> map)
         {
             foreach (char[] line in map)
@@ -164,7 +206,11 @@ namespace Hanjie
                 }
             }
         }
-
+        /// <summary>
+        /// Tests to see if a map is complete by searching for empty squares
+        /// </summary>
+        /// <param name="map"></param>
+        /// <returns></returns>
         public static bool CheckComplete(List<char[]> map)
         {
             foreach (char[] line in map)
@@ -176,7 +222,12 @@ namespace Hanjie
             }
             return true;
         }
-
+        /// <summary>
+        /// Creates Blocks from a string of values
+        /// Numbers are seperated by spaces and rows/columns by commas.
+        /// </summary>
+        /// <param name="blockString"></param>
+        /// <returns></returns>
         public static List<int[]> CreateBlocks(string blockString)
         {
             var output = new List<int[]>();
@@ -199,8 +250,8 @@ namespace Hanjie
 
         static void Main(string[] args)
         {
-            string horizontalString = "3,1 3,3 1,1 3,1 1";
-            string verticalString = "3,1 1 1,4,2 2,3";
+            string horizontalString = "4,2 2,2 2,2 2,2 2,2 2,4,6,8,10";
+            string verticalString = "1,3 2,5 3,2 5,1 4,1 4,2 5,5 3,3 2,1";
 
             var horizontalBlocks = CreateBlocks(horizontalString);
             var verticalBlocks = CreateBlocks(verticalString);
@@ -214,7 +265,6 @@ namespace Hanjie
                 attempts++;
             }
 
-
             if (attempts >= maxAttempts)
             {
                 Console.WriteLine("Unable to Complete the Puzzle.");
@@ -225,11 +275,6 @@ namespace Hanjie
                 Console.WriteLine();
                 Console.WriteLine($"Map completed in {attempts} attempts.");
             }
-
-
-
-
-
         }
     }
 }
