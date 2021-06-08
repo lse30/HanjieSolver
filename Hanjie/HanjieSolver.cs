@@ -21,6 +21,27 @@ namespace Hanjie
 {
     public class HanjieSolver
     {
+        public static HanjieMap SolveHanjieMap(int maxAttempts, HanjieMap hanjieMap)
+        {
+            var attempts = 0;
+            while (!CheckComplete(hanjieMap.map) && attempts < maxAttempts)
+            {
+                hanjieMap.map = CheckMap(hanjieMap.map, hanjieMap.horizontalBlock, hanjieMap.verticalBlock);
+                attempts++;
+            }
+
+            if (attempts >= maxAttempts)
+            {
+                Console.WriteLine("Unable to Complete the Puzzle.");
+            }
+            else
+            {
+                Console.WriteLine($"Map completed in {attempts} attempts.");
+            }
+
+            return hanjieMap;
+        }
+
         /// <summary>
         /// Generates all possible combinations of blocks on the line and
         /// compares them with each other and the current line to see what
@@ -149,26 +170,7 @@ namespace Hanjie
             }
             return map;
         }
-        /// <summary>
-        /// Sets up the grid with values
-        /// </summary>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public static List<char[]> InitMap(int length)
-        {
-            var lines = new List<char[]>();
 
-            for (var i = 0; i < length; i++)
-            {
-                var toAdd = new char[length];
-                for (var j = 0; j < length; j++)
-                {
-                    toAdd[j] = '_';
-                }
-                lines.Add(toAdd);
-            }
-            return lines;
-        }
         /// <summary>
         /// Tests to see if anything new squares can be solved
         /// </summary>
@@ -189,23 +191,7 @@ namespace Hanjie
             }
             return map;
         }
-        /// <summary>
-        /// displays the map to the console.
-        /// </summary>
-        /// <param name="map"></param>
-        public static void PrintMap(List<char[]> map)
-        {
-            foreach (var line in map)
-            {
-                Console.WriteLine();
-                char output;
-                foreach (var c in line)
-                {
-                    output = c == 'S' ? 'S' : '_';
-                    Console.Write($"{output} ");
-                }
-            }
-        }
+
         /// <summary>
         /// Tests to see if a map is complete by searching for empty squares
         /// </summary>
@@ -222,59 +208,26 @@ namespace Hanjie
             }
             return true;
         }
-        /// <summary>
-        /// Creates Blocks from a string of values
-        /// Numbers are seperated by spaces and rows/columns by commas.
-        /// </summary>
-        /// <param name="blockString"></param>
-        /// <returns></returns>
-        public static List<int[]> CreateBlocks(string blockString)
+    }
+
+    public class Hanjie
+    {
+        static void Main()
         {
-            var output = new List<int[]>();
-            var BlockStringList = blockString.Split(",");
-            string[] rowDetails;
-            int[] rowBlock;
-            for (var i = 0; i < BlockStringList.Length; i++)
-            {
-                rowDetails = BlockStringList[i].Split(" ");
-                rowBlock = new int[rowDetails.Length];
-                for (var j = 0; j < rowDetails.Length; j++)
-                {
-                    rowBlock[j] = int.Parse(rowDetails[j]);
-                }
-                output.Add(rowBlock);
-            }
-            return output;
-        }
-
-
-        static void Main(string[] args)
-        {
-            var horizontalString = "4,2 2,2 2,2 2,2 2,2 2,4,6,8,10";
-            var verticalString = "1,3 2,5 3,2 5,1 4,1 4,2 5,5 3,3 2,1";
-
-            var horizontalBlocks = CreateBlocks(horizontalString);
-            var verticalBlocks = CreateBlocks(verticalString);
-
-            var lines = InitMap(horizontalBlocks.Count);
-            var attempts = 0;
+            var horizontalString = "4, 2 2, 2 2, 2 2, 2 2, 2 2, 4,6, 8, 10";
+            var verticalString = "1, 3 2, 5 3, 2 5, 1 4, 1 4, 2 5, 5 3, 3 2, 1";
+            var hanjieMap = new HanjieMap(horizontalString, verticalString);
             var maxAttempts = 20;
-            while (!CheckComplete(lines) && attempts < maxAttempts)
-            {
-                lines = CheckMap(lines, horizontalBlocks, verticalBlocks);
-                attempts++;
-            }
+            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+            hanjieMap.PrintMap();
 
-            if (attempts >= maxAttempts)
-            {
-                Console.WriteLine("Unable to Complete the Puzzle.");
-            }
-            else
-            {
-                PrintMap(lines);
-                Console.WriteLine();
-                Console.WriteLine($"Map completed in {attempts} attempts.");
-            }
+            horizontalString = "2 2, 3 1 3, 6 5, 1 4, 4 3, 1 5 2, 9 2, 1 4, 1 4, 9 4, 13, 2 1, 4 8, 8, 15";
+            verticalString = "2 1 1 1, 3 1 1 1, 3 1 2 1 1,1 1 2 1 1, 2 2 2 1, 1 1 2 1,3 2 1,3 6,11,4 1 3, 1 2 1 3, 2 4 3, 4 8, 11 3,11 3";
+            hanjieMap = new HanjieMap(horizontalString, verticalString);
+            
+            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+
+            hanjieMap.PrintMap();
         }
     }
 }

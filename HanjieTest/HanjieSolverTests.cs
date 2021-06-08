@@ -70,67 +70,69 @@ namespace HanjieTest
         }
 
         [TestMethod]
+        public void SolveGenericPuzzleTest()
+        {
+            var horizontalString = "2 2, 3 1 3, 6 5, 1 4, 4 3, 1 5 2, 9 2, 1 4, 1 4, 9 4, 13, 2 1, 4 8, 8, 15";
+            var verticalString = "2 1 1 1, 3 1 1 1, 3 1 2 1 1,1 1 2 1 1, 2 2 2 1, 1 1 2 1,3 2 1,3 6,11,4 1 3, 1 2 1 3, 2 4 3, 4 8, 11 3,11 3";
+            var hanjieMap = new HanjieMap(horizontalString, verticalString);
+            var maxAttempts = 20;
+            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+            Assert.IsTrue(HanjieSolver.CheckComplete(hanjieMap.map));
+        }
+
+        [TestMethod]
         public void SolveExpertPuzzleTest()
         {
-            var horizontalBlocks = new List<int[]>
-            {
-                new [] { 7 },
-                new [] { 2, 3 },
-                new [] { 3 },
-                new [] { 1 },
-                new [] { 2, 2 },
-                new [] { 3, 3, 1, 5 },
-                new [] { 1, 2, 2, 4, 2, 1 },
-                new [] { 2, 4, 4, 1, 1, 1 },
-                new [] { 4, 2, 1, 1, 2 },
-                new [] { 5, 3, 7 },
-                new [] { 6, 4 },
-                new [] { 11 },
-                new [] { 12 },
-                new [] { 4, 4 },
-                new [] { 3, 4 },
-                new [] { 4, 5 },
-                new [] { 3, 6 },
-                new [] { 3, 7 },
-                new [] { 3, 6 },
-                new [] { 2 }
-            };
-
-            var verticalBlocks = new List<int[]>
-            {
-                new [] { 1, 1, 3, 1 },
-                new [] { 2, 2, 3, 2 },
-                new [] { 1, 1, 3, 2 },
-                new [] { 1, 2, 6, 4 },
-                new [] { 1, 2, 9 },
-                new [] { 1, 1, 8 },
-                new [] { 1, 1, 6, 1 },
-                new [] { 2, 2, 4, 2 },
-                new [] { 1, 2, 2, 2, 2 },
-                new [] { 2, 1, 3, 2, 3 },
-                new [] { 1, 1, 1, 2, 3 },
-                new [] { 3, 2, 4, 4 },
-                new [] { 5, 8 },
-                new [] { 1, 9 },
-                new [] { 3, 2, 5 },
-                new [] { 1, 2, 2 },
-                new [] { 2, 1 },
-                new [] { 3, 1 },
-                new [] { 1, 2 },
-                new [] { 4 }
-            };
-
-            var lines = HanjieSolver.InitMap(horizontalBlocks.Count);
+            var horizontalBlocks = "7,2 3,3,1,2 2,3 3 1 5,1 2 2 4 2 1,2 4 4 1 1 1,4 2 1 1 2,5 3 7,6 4,11,12,4 4,3 4,4 5,3 6,3 7,3 6,2";
+            var verticalBlocks = "1 1 3 1,2 2 3 2,1 1 3 2,1 2 6 4,1 2 9,1 1 8,1 1 6 1,2 2 4 2,1 2 2 2 2,2 1 3 2 3,1 1 1 2 3,3 2 4 4,5 8,1 9,3 2 5,1 2 2,2 1,3 1,1 2,4";
+            var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
             var attempts = 0;
             var maxAttempts = 20;
-            while (!HanjieSolver.CheckComplete(lines) && attempts < maxAttempts)
+            while (!HanjieSolver.CheckComplete(hanjieMap.map) && attempts < maxAttempts)
             {
-                lines = HanjieSolver.CheckMap(lines, horizontalBlocks, verticalBlocks);
+                hanjieMap.map = HanjieSolver.CheckMap(hanjieMap.map, hanjieMap.horizontalBlock, hanjieMap.verticalBlock);
                 attempts++;
             }
 
 
             Assert.IsTrue(attempts < maxAttempts, "Solver solved puzzled unsuccessfully");
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidRowsMapTest()
+        {
+            var horizontalBlocks = "4 3 7,3 6,2";
+            var verticalBlocks = "1 1 3 1,2 2 3 2,1 1 3 2,2 2,2 1,3 1,1 2,4";
+            var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void InvalidSumMapTest()
+        {
+            var horizontalBlocks = "1, 1, 1, 1, 1";
+            var verticalBlocks = "9, 9, 9, 9, 9";
+            var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void OversizedHorizontalRowTest()
+        {
+            var horizontalBlocks = "1, 1 1 2, 1, 1, 1";
+            var verticalBlocks = "1, 1 1, 1 2, 1, 1";
+            var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void OversizedVerticalRowTest()
+        {
+            var horizontalBlocks = "1, 1 1, 1, 1, 1";
+            var verticalBlocks = "1, 7, 1 2, 1, 1";
+            var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
+        }
     }
 }
+
