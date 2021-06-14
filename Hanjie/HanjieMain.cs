@@ -19,7 +19,7 @@ using System.Linq;
 /// </summary>
 namespace Hanjie
 {
-    public class HanjieSolver
+    public class HanjieMain
     {
         public static HanjieMap SolveHanjieMap(int maxAttempts, HanjieMap hanjieMap)
         {
@@ -139,6 +139,7 @@ namespace Hanjie
             }
             return currentLine;
         }
+
         /// <summary>
         /// Finds a vertical line from the row map
         /// </summary>
@@ -155,6 +156,7 @@ namespace Hanjie
             }
             return output;
         }
+
         /// <summary>
         /// places a vertical line solution back into the matrix
         /// </summary>
@@ -210,6 +212,29 @@ namespace Hanjie
         }
     }
 
+
+    public class HanjieSolverRecursive
+    {
+        public static HanjieMap SolveHanjieMapRecursively(HanjieMap hanjieMap)
+        {
+            var size = hanjieMap.map.Count;
+            hanjieMap = SolveHanjieMapRecursivelyLoop(hanjieMap, size);
+            return hanjieMap;
+        }
+
+        private static HanjieMap SolveHanjieMapRecursivelyLoop(HanjieMap hanjieMap, int size)
+        {
+            if (size == 0)
+            {
+                return hanjieMap;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
     public class Hanjie
     {
         static void Main()
@@ -218,16 +243,24 @@ namespace Hanjie
             var verticalString = "1, 3 2, 5 3, 2 5, 1 4, 1 4, 2 5, 5 3, 3 2, 1";
             var hanjieMap = new HanjieMap(horizontalString, verticalString);
             var maxAttempts = 20;
-            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+            hanjieMap = HanjieMain.SolveHanjieMap(maxAttempts, hanjieMap);
             hanjieMap.PrintMap();
 
-            horizontalString = "2 2, 3 1 3, 6 5, 1 4, 4 3, 1 5 2, 9 2, 1 4, 1 4, 9 4, 13, 2 1, 4 8, 8, 15";
-            verticalString = "2 1 1 1, 3 1 1 1, 3 1 2 1 1,1 1 2 1 1, 2 2 2 1, 1 1 2 1,3 2 1,3 6,11,4 1 3, 1 2 1 3, 2 4 3, 4 8, 11 3,11 3";
-            hanjieMap = new HanjieMap(horizontalString, verticalString);
-            
-            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+            Console.WriteLine();
+            Console.WriteLine("Creating a random Hanjie Puzzle to solve.");
+            var hanjieMapRand = HanjieBuilder.BuildHanjieMap();
+            hanjieMapRand = HanjieMain.SolveHanjieMap(maxAttempts, hanjieMapRand);
+            hanjieMapRand.PrintMap();
 
-            hanjieMap.PrintMap();
+
+
+            //solve the puzzle "1,1" "1,1"
+
+            //horizontalString = "2 2, 3 1 3, 6 5, 1 4, 4 3, 1 5 2, 9 2, 1 4, 1 4, 9 4, 13, 2 1, 4 8, 8, 15";
+            //verticalString = "2 1 1 1, 3 1 1 1, 3 1 2 1 1,1 1 2 1 1, 2 2 2 1, 1 1 2 1,3 2 1,3 6,11,4 1 3, 1 2 1 3, 2 4 3, 4 8, 11 3,11 3";
+            //hanjieMap = new HanjieMap(horizontalString, verticalString);         
+            //hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
+            //hanjieMap.PrintMap();
         }
     }
 }

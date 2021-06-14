@@ -28,7 +28,7 @@ namespace HanjieTest
             expected[4] = 'S';
             expected[5] = 'S';
             expected[6] = 'S';
-            var actual = HanjieSolver.LineSolver(blocks, currentLine);
+            var actual = HanjieMain.LineSolver(blocks, currentLine);
 
 
             CollectionAssert.AreEqual(expected, actual, "Line solver doesn't work.");
@@ -63,7 +63,7 @@ namespace HanjieTest
             expected[3] = 'x';
             expected[7] = 'x';
             expected[8] = 'x';
-            var actual = HanjieSolver.LineSolver(blocks, currentLine);
+            var actual = HanjieMain.LineSolver(blocks, currentLine);
 
             CollectionAssert.AreEqual(expected, actual, "Line solver doesn't work.");
 
@@ -76,8 +76,8 @@ namespace HanjieTest
             var verticalString = "2 1 1 1, 3 1 1 1, 3 1 2 1 1,1 1 2 1 1, 2 2 2 1, 1 1 2 1,3 2 1,3 6,11,4 1 3, 1 2 1 3, 2 4 3, 4 8, 11 3,11 3";
             var hanjieMap = new HanjieMap(horizontalString, verticalString);
             var maxAttempts = 20;
-            hanjieMap = HanjieSolver.SolveHanjieMap(maxAttempts, hanjieMap);
-            Assert.IsTrue(HanjieSolver.CheckComplete(hanjieMap.map));
+            hanjieMap = HanjieMain.SolveHanjieMap(maxAttempts, hanjieMap);
+            Assert.IsTrue(HanjieMain.CheckComplete(hanjieMap.map));
         }
 
         [TestMethod]
@@ -88,9 +88,9 @@ namespace HanjieTest
             var hanjieMap = new HanjieMap(horizontalBlocks, verticalBlocks);
             var attempts = 0;
             var maxAttempts = 20;
-            while (!HanjieSolver.CheckComplete(hanjieMap.map) && attempts < maxAttempts)
+            while (!HanjieMain.CheckComplete(hanjieMap.map) && attempts < maxAttempts)
             {
-                hanjieMap.map = HanjieSolver.CheckMap(hanjieMap.map, hanjieMap.horizontalBlock, hanjieMap.verticalBlock);
+                hanjieMap.map = HanjieMain.CheckMap(hanjieMap.map, hanjieMap.horizontalBlock, hanjieMap.verticalBlock);
                 attempts++;
             }
 
